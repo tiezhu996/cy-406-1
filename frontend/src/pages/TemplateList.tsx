@@ -143,7 +143,6 @@ export function TemplateList() {
           setCreatedInstance(null);
           navigate('/instances');
         }}
-        onClose={() => setCreatedInstance(null)}
       >
         <Typography.Paragraph>
           已基于模板创建合同实例「<strong>{createdInstance?.title}</strong>」，您可以立即编辑该实例，或前往合同实例总览页查看所有实例。
