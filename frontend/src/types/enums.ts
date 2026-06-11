@@ -50,7 +50,7 @@ export const CLAUSE_CATEGORY_LABELS: Record<ClauseCategory, string> = {
 
 export const CONTRACT_STATUS_LABELS: Record<ContractStatus, string> = {
   [ContractStatus.Draft]: '草稿',
-  [ContractStatus.Finalized]: '定稿',
+  [ContractStatus.Finalized]: '已归档',
   [ContractStatus.Signed]: '已签署'
 };
 

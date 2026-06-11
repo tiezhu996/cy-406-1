@@ -1,4 +1,4 @@
-import { Button, Input, Message, Space, Typography } from '@arco-design/web-react';
+import { Button, Input, Message, Modal, Space, Typography } from '@arco-design/web-react';
 import { IconExport, IconImport, IconPlus } from '@arco-design/web-react/icon';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { CategoryFilter, TemplateCard } from '../components/common';
 import { useClauseStore } from '../stores/clause';
 import { useInstanceStore } from '../stores/instance';
 import { useTemplateStore } from '../stores/template';
+import { ContractInstance } from '../types/contract-instance';
 import { TemplateCategory, TEMPLATE_CATEGORY_LABELS } from '../types/enums';
 import { ExportPayload, exportAllData, importAllData } from '../utils/db';
 import { downloadJson, readJsonFile } from '../utils/export';
@@ -15,6 +16,7 @@ export function TemplateList() {
   const importInputRef = useRef<HTMLInputElement>(null);
   const [keyword, setKeyword] = useState('');
   const [category, setCategory] = useState('all');
+  const [createdInstance, setCreatedInstance] = useState<ContractInstance | null>(null);
   const { templates, loadTemplates, createTemplate, duplicateTemplate, deleteTemplate } = useTemplateStore();
   const { createFromTemplate, loadInstances } = useInstanceStore();
   const { loadClauses } = useClauseStore();
@@ -53,7 +55,7 @@ export function TemplateList() {
     }
 
     const instance = await createFromTemplate(template);
-    navigate(`/instances/${instance.id}`);
+    setCreatedInstance(instance);
   };
 
   const handleExport = async () => {
@@ -126,6 +128,27 @@ export function TemplateList() {
       </div>
 
       {!filteredTemplates.length && <div className="empty-state">没有匹配的模板。</div>}
+
+      <Modal
+        title="合同实例已创建"
+        visible={!!createdInstance}
+        onOk={() => {
+          if (createdInstance) {
+            navigate(`/instances/${createdInstance.id}`);
+          }
+        }}
+        okText="去编辑实例"
+        cancelText="查看所有实例"
+        onCancel={() => {
+          setCreatedInstance(null);
+          navigate('/instances');
+        }}
+        onClose={() => setCreatedInstance(null)}
+      >
+        <Typography.Paragraph>
+          已基于模板创建合同实例「<strong>{createdInstance?.title}</strong>」，您可以立即编辑该实例，或前往合同实例总览页查看所有实例。
+        </Typography.Paragraph>
+      </Modal>
     </section>
   );
 }

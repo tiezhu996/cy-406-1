@@ -1,5 +1,6 @@
 export * from './CategoryFilter';
 export * from './ClauseCard';
+export * from './InstanceCard';
 export * from './RichEditor';
 export * from './TemplateCard';
 export * from './VariableForm';

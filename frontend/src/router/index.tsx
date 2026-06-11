@@ -2,19 +2,26 @@ import { Layout, Menu, Typography } from '@arco-design/web-react';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { ClauseList } from '../pages/ClauseList';
 import { InstanceEditor } from '../pages/InstanceEditor';
+import { InstanceList } from '../pages/InstanceList';
 import { TemplateEditor } from '../pages/TemplateEditor';
 import { TemplateList } from '../pages/TemplateList';
 import { VersionCompare } from '../pages/VersionCompare';
 
 const menuItems = [
   { key: '/templates', label: '模板库' },
+  { key: '/instances', label: '合同实例' },
   { key: '/clauses', label: '条款库' }
 ];
 
 export function AppRouter() {
   const navigate = useNavigate();
   const location = useLocation();
-  const activeKey = location.pathname.startsWith('/clauses') ? '/clauses' : '/templates';
+  let activeKey = '/templates';
+  if (location.pathname.startsWith('/instances')) {
+    activeKey = '/instances';
+  } else if (location.pathname.startsWith('/clauses')) {
+    activeKey = '/clauses';
+  }
 
   return (
     <Layout className="app-shell">
@@ -38,6 +45,7 @@ export function AppRouter() {
             <Route path="/" element={<Navigate to="/templates" replace />} />
             <Route path="/templates" element={<TemplateList />} />
             <Route path="/templates/:id/edit" element={<TemplateEditor />} />
+            <Route path="/instances" element={<InstanceList />} />
             <Route path="/instances/:id" element={<InstanceEditor />} />
             <Route path="/instances/:id/versions" element={<VersionCompare />} />
             <Route path="/clauses" element={<ClauseList />} />
